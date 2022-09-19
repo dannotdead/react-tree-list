@@ -47,15 +47,58 @@ const App = () => {
 			})
 	}
 
+	const recursiveAdd = (list: ITreeList[], id: number): ITreeList[] => {
+		return list.map((item: ITreeList) => {
+			if (item.id === id) {
+				const newItem: ITreeList = {
+					id: randomizeId(),
+					nodeName: `Node ${item.nodeName.split(' ')[1]}.${
+						item.children.length + 1
+					}`,
+					children: [],
+				}
+
+				item.children.push(newItem)
+			}
+
+			if ('children' in item) {
+				item.children = recursiveAdd(item.children, id)
+			}
+
+			return { ...item }
+		})
+	}
+
 	const deleteTreeItem = (item: ITreeList): void => {
 		const res = recursiveRemove(treeList, item.id)
 		setTreeList(res)
 	}
 
+	const addTreeItem = (item: ITreeList): void => {
+		const res = recursiveAdd(treeList, item.id)
+		setTreeList(res)
+	}
+
+	const addRootTreeItem = () => {
+		setTreeList((prevState) => [
+			...prevState,
+			{
+				id: randomizeId(),
+				nodeName: `Node ${prevState.length + 1}`,
+				children: [],
+			},
+		])
+	}
+
 	return (
 		<div>
 			<button>Reset</button>
-			<TreeList treeList={treeList} deleteTreeItem={deleteTreeItem} />
+			<button onClick={addRootTreeItem}>+</button>
+			<TreeList
+				treeList={treeList}
+				deleteTreeItem={deleteTreeItem}
+				addTreeItem={addTreeItem}
+			/>
 		</div>
 	)
 }
@@ -63,17 +106,19 @@ const App = () => {
 const TreeList = ({
 	treeList,
 	deleteTreeItem,
+	addTreeItem,
 }: {
 	treeList: ITreeList[]
 	deleteTreeItem: (item: ITreeList) => void
+	addTreeItem: (item: ITreeList) => void
 }) => {
 	return (
 		<ul>
 			{treeList.map((item, index) => (
 				<div key={Date.now() + index}>
-					<li style={{ whiteSpace: 'nowrap' }}>
+					<li>
 						{item.nodeName}
-						<button onClick={() => console.log(item)}>+</button>
+						<button onClick={() => addTreeItem(item)}>+</button>
 						<button onClick={() => deleteTreeItem(item)}>-</button>
 						<button onClick={() => console.log(item)}>Edit</button>
 					</li>
@@ -82,6 +127,7 @@ const TreeList = ({
 							<TreeList
 								treeList={item.children}
 								deleteTreeItem={deleteTreeItem}
+								addTreeItem={addTreeItem}
 							/>
 						)}
 					</>
