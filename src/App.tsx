@@ -1,117 +1,66 @@
-import React, { useEffect, useState } from 'react'
+import React, { useReducer } from 'react'
+import { reducerTreeList } from './store/reducer'
+import { IAction, ITreeList, randomizeId } from './store/actions'
 import './App.css'
 
-interface ITreeList {
-	id: number
-	nodeName: string
-	children: ITreeList[]
-}
-
 const App = () => {
-	const [treeList, setTreeList] = useState<ITreeList[]>([])
-
-	const randomizeId = (): number => Math.floor(Math.random() * 10e8)
-
-	useEffect(() => {
-		setTreeList([
-			{
-				id: randomizeId(),
-				nodeName: 'Node 1',
-				children: [
-					{ id: randomizeId(), nodeName: 'Node 1.1', children: [] },
-					{ id: randomizeId(), nodeName: 'Node 1.2', children: [] },
-					{
-						id: randomizeId(),
-						nodeName: 'Node 1.3',
-						children: [
-							{ id: randomizeId(), nodeName: 'Node 1.3.1', children: [] },
-							{ id: randomizeId(), nodeName: 'Node 1.3.2', children: [] },
-						],
-					},
-				],
-			},
-			{ id: randomizeId(), nodeName: 'Node 2', children: [] },
-		])
-	}, [])
-
-	const recursiveRemove = (list: ITreeList[], id: number): ITreeList[] => {
-		return list
-			.map((item: ITreeList) => {
-				return { ...item }
-			})
-			.filter((item: ITreeList) => {
-				if ('children' in item) {
-					item.children = recursiveRemove(item.children, id)
-				}
-				return item.id !== id
-			})
-	}
-
-	const recursiveAdd = (list: ITreeList[], id: number): ITreeList[] => {
-		return list.map((item: ITreeList) => {
-			if (item.id === id) {
-				const newItem: ITreeList = {
+	const [treeList, dispatch] = useReducer(reducerTreeList, [
+		{
+			id: randomizeId(),
+			nodeName: 'Node 1',
+			children: [
+				{ id: randomizeId(), nodeName: 'Node 1.1', children: [] },
+				{ id: randomizeId(), nodeName: 'Node 1.2', children: [] },
+				{
 					id: randomizeId(),
-					nodeName: `Node ${item.nodeName.split(' ')[1]}.${
-						item.children.length + 1
-					}`,
-					children: [],
-				}
-
-				item.children.push(newItem)
-			}
-
-			if ('children' in item) {
-				item.children = recursiveAdd(item.children, id)
-			}
-
-			return { ...item }
-		})
-	}
-
-	const deleteTreeItem = (item: ITreeList): void => {
-		const res = recursiveRemove(treeList, item.id)
-		setTreeList(res)
-	}
-
-	const addTreeItem = (item: ITreeList): void => {
-		const res = recursiveAdd(treeList, item.id)
-		setTreeList(res)
-	}
+					nodeName: 'Node 1.3',
+					children: [
+						{ id: randomizeId(), nodeName: 'Node 1.3.1', children: [] },
+						{ id: randomizeId(), nodeName: 'Node 1.3.2', children: [] },
+					],
+				},
+			],
+		},
+		{ id: randomizeId(), nodeName: 'Node 2', children: [] },
+	])
 
 	const addRootTreeItem = () => {
-		setTreeList((prevState) => [
-			...prevState,
-			{
-				id: randomizeId(),
-				nodeName: `Node ${prevState.length + 1}`,
-				children: [],
-			},
-		])
+		dispatch({
+			type: 'addRoot',
+			payload: null,
+		})
 	}
 
 	return (
 		<div>
 			<button>Reset</button>
 			<button onClick={addRootTreeItem}>+</button>
-			<TreeList
-				treeList={treeList}
-				deleteTreeItem={deleteTreeItem}
-				addTreeItem={addTreeItem}
-			/>
+			<TreeList treeList={treeList} dispatch={dispatch} />
 		</div>
 	)
 }
 
 const TreeList = ({
 	treeList,
-	deleteTreeItem,
-	addTreeItem,
+	dispatch,
 }: {
 	treeList: ITreeList[]
-	deleteTreeItem: (item: ITreeList) => void
-	addTreeItem: (item: ITreeList) => void
+	dispatch: (action: IAction) => void
 }) => {
+	const addTreeItem = (item: ITreeList): void => {
+		dispatch({
+			type: 'add',
+			payload: item.id,
+		})
+	}
+
+	const deleteTreeItem = (item: ITreeList): void => {
+		dispatch({
+			type: 'delete',
+			payload: item.id,
+		})
+	}
+
 	return (
 		<ul>
 			{treeList.map((item, index) => (
@@ -124,11 +73,7 @@ const TreeList = ({
 					</li>
 					<>
 						{item.children && (
-							<TreeList
-								treeList={item.children}
-								deleteTreeItem={deleteTreeItem}
-								addTreeItem={addTreeItem}
-							/>
+							<TreeList treeList={item.children} dispatch={dispatch} />
 						)}
 					</>
 				</div>
