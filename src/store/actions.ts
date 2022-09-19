@@ -13,6 +13,26 @@ export interface ITreeList {
 
 export const randomizeId = (): number => Math.floor(Math.random() * 10e8)
 
+export const initialState: ITreeList[] = [
+	{
+		id: randomizeId(),
+		nodeName: 'Node 1',
+		children: [
+			{ id: randomizeId(), nodeName: 'Node 1.1', children: [] },
+			{ id: randomizeId(), nodeName: 'Node 1.2', children: [] },
+			{
+				id: randomizeId(),
+				nodeName: 'Node 1.3',
+				children: [
+					{ id: randomizeId(), nodeName: 'Node 1.3.1', children: [] },
+					{ id: randomizeId(), nodeName: 'Node 1.3.2', children: [] },
+				],
+			},
+		],
+	},
+	{ id: randomizeId(), nodeName: 'Node 2', children: [] },
+]
+
 export const recursiveAdd = (list: ITreeList[], id: Payload): ITreeList[] => {
 	return list.map((item: ITreeList) => {
 		if (item.id === id) {

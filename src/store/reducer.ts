@@ -1,6 +1,7 @@
 import {
 	IAction,
 	ITreeList,
+	initialState,
 	randomizeId,
 	recursiveAdd,
 	recursiveRemove,
@@ -24,6 +25,8 @@ export const reducerTreeList = (
 			return recursiveAdd(state, action.payload)
 		case 'delete':
 			return recursiveRemove(state, action.payload)
+		case 'reset':
+			return initialState
 		default:
 			return state
 	}

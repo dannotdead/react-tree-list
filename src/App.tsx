@@ -1,39 +1,28 @@
 import React, { useReducer } from 'react'
 import { reducerTreeList } from './store/reducer'
-import { IAction, ITreeList, randomizeId } from './store/actions'
+import { IAction, ITreeList, initialState } from './store/actions'
 import './App.css'
 
 const App = () => {
-	const [treeList, dispatch] = useReducer(reducerTreeList, [
-		{
-			id: randomizeId(),
-			nodeName: 'Node 1',
-			children: [
-				{ id: randomizeId(), nodeName: 'Node 1.1', children: [] },
-				{ id: randomizeId(), nodeName: 'Node 1.2', children: [] },
-				{
-					id: randomizeId(),
-					nodeName: 'Node 1.3',
-					children: [
-						{ id: randomizeId(), nodeName: 'Node 1.3.1', children: [] },
-						{ id: randomizeId(), nodeName: 'Node 1.3.2', children: [] },
-					],
-				},
-			],
-		},
-		{ id: randomizeId(), nodeName: 'Node 2', children: [] },
-	])
+	const [treeList, dispatch] = useReducer(reducerTreeList, initialState)
 
-	const addRootTreeItem = () => {
+	const addRootTreeItem = (): void => {
 		dispatch({
 			type: 'addRoot',
 			payload: null,
 		})
 	}
 
+	const resetTreeList = (): void => {
+		dispatch({
+			type: 'reset',
+			payload: null,
+		})
+	}
+
 	return (
 		<div>
-			<button>Reset</button>
+			<button onClick={resetTreeList}>Reset</button>
 			<button onClick={addRootTreeItem}>+</button>
 			<TreeList treeList={treeList} dispatch={dispatch} />
 		</div>
