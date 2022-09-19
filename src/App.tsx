@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, useState } from 'react'
 import { reducerTreeList } from './store/reducer'
 import { IAction, ITreeList, initialState } from './store/actions'
 import './App.css'
@@ -39,26 +39,88 @@ const TreeList = ({
 	const addTreeItem = (item: ITreeList): void => {
 		dispatch({
 			type: 'add',
-			payload: item.id,
+			payload: { id: item.id },
+		})
+	}
+
+	const editTreeItem = (item: ITreeList, value: string): void => {
+		dispatch({
+			type: 'edit',
+			payload: { id: item.id, editValue: value },
+		})
+		setEditTreeItemState({
+			id: 0,
+			isEdit: false,
+			value: '',
 		})
 	}
 
 	const deleteTreeItem = (item: ITreeList): void => {
 		dispatch({
 			type: 'delete',
-			payload: item.id,
+			payload: { id: item.id },
 		})
 	}
 
+	const [editTreeItemState, setEditTreeItemState] = useState({
+		id: 0,
+		isEdit: false,
+		value: '',
+	})
+
 	return (
 		<ul>
-			{treeList.map((item, index) => (
-				<div key={Date.now() + index}>
+			{treeList.map((item) => (
+				<div key={item.id}>
 					<li>
-						{item.nodeName}
-						<button onClick={() => addTreeItem(item)}>+</button>
-						<button onClick={() => deleteTreeItem(item)}>-</button>
-						<button onClick={() => console.log(item)}>Edit</button>
+						{editTreeItemState.id === item.id ? (
+							<>
+								<input
+									value={editTreeItemState.value}
+									onChange={(event) => {
+										setEditTreeItemState({
+											...editTreeItemState,
+											value: event.target.value,
+										})
+									}}
+								/>
+								<button
+									onClick={() => {
+										editTreeItem(item, editTreeItemState.value)
+									}}
+								>
+									Save
+								</button>
+								<button
+									onClick={() => {
+										setEditTreeItemState({
+											id: 0,
+											isEdit: false,
+											value: '',
+										})
+									}}
+								>
+									Cancel
+								</button>
+							</>
+						) : (
+							<>
+								{item.nodeName}
+								<button onClick={() => addTreeItem(item)}>+</button>
+								<button onClick={() => deleteTreeItem(item)}>-</button>
+								<button
+									onClick={() => {
+										setEditTreeItemState({
+											id: item.id,
+											isEdit: true,
+											value: item.nodeName,
+										})
+									}}
+								>
+									Edit
+								</button>
+							</>
+						)}
 					</li>
 					<>
 						{item.children && (

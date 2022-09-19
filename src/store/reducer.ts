@@ -5,6 +5,7 @@ import {
 	randomizeId,
 	recursiveAdd,
 	recursiveRemove,
+	recursiveEdit,
 } from './actions'
 
 export const reducerTreeList = (
@@ -23,6 +24,8 @@ export const reducerTreeList = (
 			]
 		case 'add':
 			return recursiveAdd(state, action.payload)
+		case 'edit':
+			return recursiveEdit(state, action.payload)
 		case 'delete':
 			return recursiveRemove(state, action.payload)
 		case 'reset':

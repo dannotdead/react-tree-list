@@ -1,4 +1,7 @@
-type Payload = number | null
+type Payload = {
+	id: number
+	editValue?: string
+} | null
 
 export interface IAction {
 	type: string
@@ -33,9 +36,12 @@ export const initialState: ITreeList[] = [
 	{ id: randomizeId(), nodeName: 'Node 2', children: [] },
 ]
 
-export const recursiveAdd = (list: ITreeList[], id: Payload): ITreeList[] => {
+export const recursiveAdd = (
+	list: ITreeList[],
+	payload: Payload
+): ITreeList[] => {
 	return list.map((item: ITreeList) => {
-		if (item.id === id) {
+		if (item.id === payload?.id) {
 			const newItem: ITreeList = {
 				id: randomizeId(),
 				nodeName: `Node ${item.nodeName.split(' ')[1]}.${
@@ -48,7 +54,26 @@ export const recursiveAdd = (list: ITreeList[], id: Payload): ITreeList[] => {
 		}
 
 		if ('children' in item) {
-			item.children = recursiveAdd(item.children, id)
+			item.children = recursiveAdd(item.children, payload)
+		}
+
+		return { ...item }
+	})
+}
+
+export const recursiveEdit = (
+	list: ITreeList[],
+	payload: Payload
+): ITreeList[] => {
+	return list.map((item: ITreeList) => {
+		if (item.id === payload?.id) {
+			if (payload.editValue != null) {
+				item.nodeName = payload.editValue
+			}
+		}
+
+		if ('children' in item) {
+			item.children = recursiveEdit(item.children, payload)
 		}
 
 		return { ...item }
@@ -57,7 +82,7 @@ export const recursiveAdd = (list: ITreeList[], id: Payload): ITreeList[] => {
 
 export const recursiveRemove = (
 	list: ITreeList[],
-	id: Payload
+	payload: Payload
 ): ITreeList[] => {
 	return list
 		.map((item: ITreeList) => {
@@ -65,8 +90,8 @@ export const recursiveRemove = (
 		})
 		.filter((item: ITreeList) => {
 			if ('children' in item) {
-				item.children = recursiveRemove(item.children, id)
+				item.children = recursiveRemove(item.children, payload)
 			}
-			return item.id !== id
+			return item.id !== payload?.id
 		})
 }
