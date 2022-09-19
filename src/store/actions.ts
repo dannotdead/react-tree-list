@@ -1,18 +1,4 @@
-type Payload = {
-	id: number
-	editValue?: string
-} | null
-
-export interface IAction {
-	type: string
-	payload: Payload
-}
-
-export interface ITreeList {
-	id: number
-	nodeName: string
-	children: ITreeList[]
-}
+import { ITreeList, Payload } from '../interfaces/interfaces'
 
 export const randomizeId = (): number => Math.floor(Math.random() * 10e8)
 

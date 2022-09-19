@@ -1,12 +1,11 @@
 import {
-	IAction,
-	ITreeList,
 	initialState,
 	randomizeId,
 	recursiveAdd,
 	recursiveRemove,
 	recursiveEdit,
 } from './actions'
+import { IAction, ITreeList } from '../interfaces/interfaces'
 
 export const reducerTreeList = (
 	state: ITreeList[],
