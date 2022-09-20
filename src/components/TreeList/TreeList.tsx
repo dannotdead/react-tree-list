@@ -24,8 +24,8 @@ const TreeList = ({
 	return (
 		<ul>
 			{treeList.map((item) => (
-				<div key={item.id}>
-					<li>
+				<>
+					<li key={item.id}>
 						{editTreeItemState.id === item.id ? (
 							<EditTreeItem
 								item={item}
@@ -46,7 +46,7 @@ const TreeList = ({
 							<TreeList treeList={item.children} dispatch={dispatch} />
 						)}
 					</>
-				</div>
+				</>
 			))}
 		</ul>
 	)

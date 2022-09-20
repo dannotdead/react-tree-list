@@ -4,7 +4,10 @@ import { initialState } from '../store/actions'
 import TreeList from './TreeList/TreeList'
 
 const App = () => {
-	const [treeList, dispatch] = useReducer(reducerTreeList, initialState)
+	const [treeList, dispatch] = useReducer(
+		reducerTreeList,
+		JSON.parse(JSON.stringify(initialState))
+	)
 
 	const addRootTreeItem = (): void => {
 		dispatch({
@@ -22,8 +25,8 @@ const App = () => {
 
 	return (
 		<div>
+			<button onClick={addRootTreeItem}>Add Root Node</button>
 			<button onClick={resetTreeList}>Reset</button>
-			<button onClick={addRootTreeItem}>+</button>
 			<TreeList treeList={treeList} dispatch={dispatch} />
 		</div>
 	)

@@ -21,6 +21,7 @@ const EditTreeItem = ({
 			type: 'edit',
 			payload: { id: item.id, editValue: value },
 		})
+
 		setEditTreeItemState({
 			id: 0,
 			isEdit: false,
@@ -31,28 +32,24 @@ const EditTreeItem = ({
 		<>
 			<input
 				value={editTreeItemState.value}
-				onChange={(event) => {
+				onChange={(event) =>
 					setEditTreeItemState({
 						...editTreeItemState,
 						value: event.target.value,
 					})
-				}}
+				}
 			/>
-			<button
-				onClick={() => {
-					editTreeItem(item, editTreeItemState.value)
-				}}
-			>
+			<button onClick={() => editTreeItem(item, editTreeItemState.value)}>
 				Save
 			</button>
 			<button
-				onClick={() => {
+				onClick={() =>
 					setEditTreeItemState({
 						id: 0,
 						isEdit: false,
 						value: '',
 					})
-				}}
+				}
 			>
 				Cancel
 			</button>

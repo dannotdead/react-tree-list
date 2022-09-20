@@ -30,9 +30,7 @@ export const recursiveAdd = (
 		if (item.id === payload?.id) {
 			const newItem: ITreeList = {
 				id: randomizeId(),
-				nodeName: `Node ${item.nodeName.split(' ')[1]}.${
-					item.children.length + 1
-				}`,
+				nodeName: 'Node Name',
 				children: [],
 			}
 

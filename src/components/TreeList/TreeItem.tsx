@@ -31,16 +31,16 @@ const TreeItem = ({
 	return (
 		<>
 			{item.nodeName}
-			<button onClick={() => addTreeItem(item)}>+</button>
-			<button onClick={() => deleteTreeItem(item)}>-</button>
+			<button onClick={() => addTreeItem(item)}>Add</button>
+			<button onClick={() => deleteTreeItem(item)}>Delete</button>
 			<button
-				onClick={() => {
+				onClick={() =>
 					setEditTreeItemState({
 						id: item.id,
 						isEdit: true,
 						value: item.nodeName,
 					})
-				}}
+				}
 			>
 				Edit
 			</button>
