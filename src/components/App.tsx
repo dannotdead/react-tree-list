@@ -2,6 +2,7 @@ import React, { useReducer } from 'react'
 import { reducerTreeList } from '../store/reducer'
 import { initialState } from '../store/actions'
 import TreeList from './TreeList/TreeList'
+import Button from './Button/Button'
 
 const App = () => {
 	const [treeList, dispatch] = useReducer(
@@ -25,8 +26,8 @@ const App = () => {
 
 	return (
 		<div>
-			<button onClick={addRootTreeItem}>Add Root Node</button>
-			<button onClick={resetTreeList}>Reset</button>
+			<Button onClick={addRootTreeItem} name='Add Root Node' />
+			<Button onClick={resetTreeList} name='Reset' />
 			<TreeList treeList={treeList} dispatch={dispatch} />
 		</div>
 	)

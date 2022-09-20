@@ -4,6 +4,7 @@ import {
 	IAction,
 	ITreeList,
 } from '../../interfaces/interfaces'
+import Button from '../Button/Button'
 
 const EditTreeItem = ({
 	item,
@@ -39,10 +40,11 @@ const EditTreeItem = ({
 					})
 				}
 			/>
-			<button onClick={() => editTreeItem(item, editTreeItemState.value)}>
-				Save
-			</button>
-			<button
+			<Button
+				onClick={() => editTreeItem(item, editTreeItemState.value)}
+				name='Save'
+			/>
+			<Button
 				onClick={() =>
 					setEditTreeItemState({
 						id: 0,
@@ -50,9 +52,8 @@ const EditTreeItem = ({
 						value: '',
 					})
 				}
-			>
-				Cancel
-			</button>
+				name='Cancel'
+			/>
 		</>
 	)
 }

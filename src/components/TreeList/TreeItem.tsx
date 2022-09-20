@@ -4,6 +4,7 @@ import {
 	IAction,
 	ITreeList,
 } from '../../interfaces/interfaces'
+import Button from '../Button/Button'
 
 const TreeItem = ({
 	item,
@@ -31,9 +32,9 @@ const TreeItem = ({
 	return (
 		<>
 			{item.nodeName}
-			<button onClick={() => addTreeItem(item)}>Add</button>
-			<button onClick={() => deleteTreeItem(item)}>Delete</button>
-			<button
+			<Button onClick={() => addTreeItem(item)} name='Add' />
+			<Button onClick={() => deleteTreeItem(item)} name='Delete' />
+			<Button
 				onClick={() =>
 					setEditTreeItemState({
 						id: item.id,
@@ -41,9 +42,8 @@ const TreeItem = ({
 						value: item.nodeName,
 					})
 				}
-			>
-				Edit
-			</button>
+				name='Edit'
+			/>
 		</>
 	)
 }
