@@ -5,12 +5,10 @@ interface IButton extends HTMLAttributes<HTMLButtonElement> {
 	name: ReactNode
 }
 
-const Button = ({ name, ...props }: IButton) => {
+export const Button = ({ name, ...props }: IButton) => {
 	return (
 		<button {...props} className='button'>
 			{name}
 		</button>
 	)
 }
-
-export default Button

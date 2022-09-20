@@ -4,7 +4,7 @@ import {
 	IAction,
 	ITreeList,
 } from '../../interfaces/interfaces'
-import Button from '../Button/Button'
+import Button from '../Button'
 
 const TreeItem = ({
 	item,

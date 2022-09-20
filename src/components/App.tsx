@@ -2,7 +2,7 @@ import React, { useReducer } from 'react'
 import { reducerTreeList } from '../store/reducer'
 import { initialState } from '../store/actions'
 import TreeList from './TreeList/TreeList'
-import Button from './Button/Button'
+import Button from './Button'
 
 const App = () => {
 	const [treeList, dispatch] = useReducer(
